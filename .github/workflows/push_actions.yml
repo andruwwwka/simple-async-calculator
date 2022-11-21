@@ -14,8 +14,9 @@ jobs:
       - run: isort .
       - run: pip install black
       - run: black --check .
+        id: black_check
         continue-on-error: true
-      - if: failure()
+      - if: steps.black_check.outcome != 'success'
         run: |
           black .
           git config --global user.name github-actions
