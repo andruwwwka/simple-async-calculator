@@ -1,5 +1,5 @@
 name: Pull request actions
-on: [pull-request]
+on: [pull_request]
 jobs:
   code_quality:
     steps:
