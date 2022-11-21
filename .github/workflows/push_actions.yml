@@ -15,6 +15,9 @@ jobs:
       - run: pip install black
       - run: black .
       - uses: technote-space/get-diff-action@v6
+        with:
+          PATTERNS: |
+            **/*.py
         id: git-diff
       - if: steps.git-diff.outputs.diff
         run: |
