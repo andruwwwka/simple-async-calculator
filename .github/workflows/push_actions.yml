@@ -14,6 +14,7 @@ jobs:
       - run: isort .
       - run: pip install black
       - run: black --check .
+        continue-on-error: true
       - if: failure()
         run: |
           black .
