@@ -5,9 +5,8 @@ from simple_async_calculator.entities.create_task import (
     CreateTaskResponse,
 )
 from simple_async_calculator.entities.task_detail import TaskDetailResponse
-from simple_async_calculator.entities.tasks_listing import TaskListingResponse, TaskItem
+from simple_async_calculator.entities.tasks_listing import TaskItem, TaskListingResponse
 from simple_async_calculator.enums.status import Status
-
 
 app = FastAPI()
 
