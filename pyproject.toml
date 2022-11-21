@@ -2,7 +2,7 @@
 name = "simple-async-calculator"
 version = "0.1.0"
 description = ""
-authors = ["Андрей Леонтьев <an.leontiev@cian.ru>"]
+authors = ["Андрей Леонтьев <andruwwwka@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
