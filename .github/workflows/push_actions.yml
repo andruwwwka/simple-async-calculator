@@ -13,12 +13,11 @@ jobs:
       - run: pip install isort
       - run: isort .
       - run: pip install black
-      - run: black --check .
-        id: black_check
-        continue-on-error: true
-      - if: steps.black_check.outcome != 'success'
+      - run: black .
+      - uses: technote-space/get-diff-action@v6
+        id: git-diff
+      - if: steps.git-diff.outputs.diff
         run: |
-          black .
           git config --global user.name github-actions
           git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          
           # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
