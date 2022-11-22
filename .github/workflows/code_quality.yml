@@ -7,7 +7,6 @@ on:
       - completed
 jobs:
   pylint:
-    needs: formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +19,6 @@ jobs:
       - run: poetry install --with pylint --without dev
       - run: poetry run pylint --recursive=y .
   mypy:
-    needs: formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
