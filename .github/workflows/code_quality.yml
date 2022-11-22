@@ -1,30 +1,11 @@
 name: Code quality
-on: [pull_request]
+on:
+  workflow_run:
+    workflows:
+      - Formatter
+    types:
+      - completed
 jobs:
-  formatter:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: pip install isort
-      - run: isort .
-      - run: pip install black
-      - run: black .
-      - id: git-diff
-        run: |
-          diff_list=`git diff --name-only`
-          echo "diff=$diff_list" >> $GITHUB_OUTPUT
-      - if: steps.git-diff.outputs.diff
-        run: |
-          git config --global user.name github-actions
-          git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          
-          # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git commit -am "[GitHub Actions] Format Python code with psf/black and PyCQA/isort"
-          git push  # --force origin HEAD:$GITHUB_REF
   pylint:
     needs: formatter
     runs-on: ubuntu-latest
