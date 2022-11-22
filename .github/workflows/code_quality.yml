@@ -1,11 +1,16 @@
 name: Code quality
 on:
-  workflow_run:
-    workflows: [Formatter]
+  pull_request:
     types:
-      - completed
+      - labeled
 jobs:
+  check_label:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ startsWith(github.event.label.name, 'formatted') }}
+        runs: echo "Run code quality checks"
   pylint:
+    needs: check_label
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,6 +23,7 @@ jobs:
       - run: poetry install --with pylint --without dev
       - run: poetry run pylint --recursive=y .
   mypy:
+    needs: check_label
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,3 +35,12 @@ jobs:
       - run: pip install poetry
       - run: poetry install --with mypy --without dev
       - run: poetry run mypy .
+  remove_label:
+    needs:
+      - mypy
+      - pylint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: formatted
