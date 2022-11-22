@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Status(str, Enum):
-    pending = "pending"
-    success = "success"
-    error = "error"
+    """Допустимые статусы задачи"""
+    PENDING = "pending"
+    SUCCESS = "success"
+    ERROR = "error"

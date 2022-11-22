@@ -6,7 +6,7 @@ from simple_async_calculator.services.tasks import app
 
 @click.group()
 def cli():
-    ...
+    """Группа cli-команд приложения"""
 
 
 @cli.command()
@@ -14,6 +14,7 @@ def cli():
 @click.option("--host", type=str, default="127.0.0.1")
 @click.option("--port", type=int, default=8000)
 def serve(debug: bool, host: str, port: int):
+    """Команда запкска сервиса разработки"""
     uvicorn.run(app, host=host, port=port, log_level="debug" if debug else "warning")
 
 
