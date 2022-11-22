@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from simple_async_calculator.enums.status import Status
 
@@ -6,11 +6,11 @@ from simple_async_calculator.enums.status import Status
 class TaskItem(BaseModel):
     """Вложенный элемент задачи в списке доступных"""
 
-    id: int
-    status: Status
+    id: int = Field(title="Идентификатор задачи")
+    status: Status = Field(title="Статус выполнения задачи")
 
 
 class TaskListingResponse(BaseModel):
     """Схема ответа ручки листинга задач"""
 
-    tasks: list[TaskItem]
+    tasks: list[TaskItem] = Field(title="Список всех задач")
