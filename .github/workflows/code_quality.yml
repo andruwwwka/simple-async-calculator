@@ -1,16 +1,7 @@
 name: Code quality
-on:
-  pull_request:
-    types:
-      - labeled
+on: [pull_request]
 jobs:
-  check_label:
-    runs-on: ubuntu-latest
-    steps:
-      - if: ${{ startsWith(github.event.label.name, 'formatted') }}
-        run: echo "Run code quality checks"
   pylint:
-    needs: check_label
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,7 +14,6 @@ jobs:
       - run: poetry install --with pylint --without dev
       - run: poetry run pylint --recursive=y .
   mypy:
-    needs: check_label
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,12 +25,30 @@ jobs:
       - run: pip install poetry
       - run: poetry install --with mypy --without dev
       - run: poetry run mypy .
-  remove_label:
+  formatter:
     needs:
       - mypy
       - pylint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions-ecosystem/action-remove-labels@v1
+      - uses: actions/checkout@v3
         with:
-          labels: formatted
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install isort
+      - run: isort .
+      - run: pip install black
+      - run: black .
+      - id: git-diff
+        run: |
+          diff_list=`git diff --name-only`
+          echo "diff=$diff_list" >> $GITHUB_OUTPUT
+      - if: steps.git-diff.outputs.diff
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          
+          git commit -am "[GitHub Actions] Format Python code with psf/black and PyCQA/isort"
+          git push
+
