@@ -30,4 +30,4 @@ jobs:
           git push  # --force origin HEAD:$GITHUB_REF
 #      - uses: actions-ecosystem/action-add-labels@v1
 #        with:
-#          labels: formatted
+#          labels: formatted#
