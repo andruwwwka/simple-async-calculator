@@ -1,8 +1,7 @@
 name: Code quality
 on:
   workflow_run:
-    workflows:
-      - Formatter
+    workflows: [Formatter]
     types:
       - completed
 jobs:
