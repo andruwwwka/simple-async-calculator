@@ -14,12 +14,11 @@ jobs:
       - run: isort .
       - run: pip install black
       - run: black .
-      - uses: technote-space/get-diff-action@v6
+      - uses: jitterbit/get-changed-files@v1
         with:
-          PATTERNS: |
-            **/*.py
+          format: 'py'
         id: git-diff
-      - if: steps.git-diff.outputs.diff
+      - if: steps.git-diff.outputs.all
         run: |
           git config --global user.name github-actions
           git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          
