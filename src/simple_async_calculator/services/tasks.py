@@ -5,7 +5,10 @@ from simple_async_calculator.entities.api.create_task import (
     CreateTaskResponse,
 )
 from simple_async_calculator.entities.api.task_detail import TaskDetailResponse
-from simple_async_calculator.entities.api.tasks_listing import TaskItem, TaskListingResponse
+from simple_async_calculator.entities.api.tasks_listing import (
+    TaskItem,
+    TaskListingResponse,
+)
 from simple_async_calculator.entities.db.task import Task
 from simple_async_calculator.enums.status import Status
 from simple_async_calculator.services.calculator import calculate
@@ -38,7 +41,9 @@ async def create_task(task: CreateTaskRequest) -> CreateTaskResponse:
 @app.get("/tasks", response_model=TaskListingResponse)
 async def tasks_listing() -> TaskListingResponse:
     """Сервис ручки листинга задач"""
-    return TaskListingResponse(tasks=[TaskItem(**task.dict()) for task in TASKS_CONTAINER])
+    return TaskListingResponse(
+        tasks=[TaskItem(**task.dict()) for task in TASKS_CONTAINER]
+    )
 
 
 @app.get("/tasks/{task_id}", response_model=TaskDetailResponse)
