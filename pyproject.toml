@@ -14,14 +14,19 @@ fastapi = "^0.87.0"
 click = "^8.1.3"
 uvicorn = "^0.20.0"
 
-[tool.poetry.group.lint]
+[tool.poetry.group.pylint]
 optional = true
 
-[tool.poetry.group.lint.dependencies]
+[tool.poetry.group.pylint.dependencies]
+pylint = "^2.15.6"
+
+[tool.poetry.group.mypy]
+optional = true
+
+[tool.poetry.group.mypy.dependencies]
 mypy = "^0.991"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^2.15.6"
 isort = "^5.10.1"
 black = "^22.10.0"
 
