@@ -1,4 +1,4 @@
-name: Push actions
+name: Formatter
 on: [push]
 jobs:
   formatter:
