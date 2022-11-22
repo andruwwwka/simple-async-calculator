@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: ${{ startsWith(github.event.label.name, 'formatted') }}
-        runs: echo "Run code quality checks"
+        run: echo "Run code quality checks"
   pylint:
     needs: check_label
     runs-on: ubuntu-latest
