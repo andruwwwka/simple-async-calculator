@@ -22,5 +22,5 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: poetry install --with dev
+      - run: poetry install --with lint
       - run: poetry run mypy .

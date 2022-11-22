@@ -2,7 +2,8 @@ from enum import Enum
 
 
 class Operator(str, Enum):
-    summation = "+"
-    subtraction = "-"
-    multiplication = "*"
-    division = "/"
+    """Доступные операторы математических операций"""
+    SUMMATION = "+"
+    SUBTRACTION = "-"
+    MULTIPLICATION = "*"
+    DIVISION = "/"
