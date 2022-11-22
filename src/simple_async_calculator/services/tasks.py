@@ -3,8 +3,8 @@ import logging
 from fastapi import FastAPI
 
 from simple_async_calculator.entities.create_task import (
-    CreateTaskRequest,
     CreateTaskResponse,
+    CreateTaskRequest,
 )
 from simple_async_calculator.entities.task_detail import TaskDetailResponse
 from simple_async_calculator.entities.tasks_listing import TaskItem, TaskListingResponse
