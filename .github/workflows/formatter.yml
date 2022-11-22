@@ -4,6 +4,9 @@ jobs:
   formatter:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: formatted
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
@@ -25,6 +28,6 @@ jobs:
           # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git commit -am "[GitHub Actions] Format Python code with psf/black and PyCQA/isort"
           git push  # --force origin HEAD:$GITHUB_REF
-      - uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: formatted
+#      - uses: actions-ecosystem/action-add-labels@v1
+#        with:
+#          labels: formatted
