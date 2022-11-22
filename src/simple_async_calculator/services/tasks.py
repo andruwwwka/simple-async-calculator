@@ -35,7 +35,7 @@ async def tasks_listing() -> TaskListingResponse:
 
 @app.get("/tasks/{task_id}", response_model=TaskDetailResponse)
 async def task_detail(
-        task_id: int = Path(description="Идентификатор задачи", ge=MIN_AVAILABLE_TASK_ID),
+    task_id: int = Path(description="Идентификатор задачи", ge=MIN_AVAILABLE_TASK_ID),
 ) -> TaskDetailResponse:
     """Сервис ручки получения результата задачи"""
     logging.debug(task_id)
