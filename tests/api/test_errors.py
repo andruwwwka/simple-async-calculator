@@ -33,8 +33,8 @@ def test_create_task__invalid_operator(client):
     response = client.post(
         "/tasks",
         json={
-            "x": 1,
-            "y": 2,
+            "x": 454,
+            "y": 26,
             "operator": "//",
         },
     )
