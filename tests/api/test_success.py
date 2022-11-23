@@ -1,3 +1,6 @@
+import pytest
+
+
 def test_create_task(client):
     """Тест метода API создания задачи"""
     # act
@@ -53,15 +56,24 @@ def test_tasks_listing__with_task_items(client):
     }
 
 
-def test_task_detail(client):
+@pytest.mark.parametrize(
+    'operator,result',
+    [
+        ('+', 10),
+        ('-', 6),
+        ('*', 16),
+        ('/', 4),
+    ]
+)
+def test_task_detail(client, operator, result):
     """Тест метода API для получения резултьтатов вычислений"""
     # arrange
     create_response = client.post(
         "/tasks",
         json={
-            "x": 1,
+            "x": 8,
             "y": 2,
-            "operator": "+",
+            "operator": operator,
         },
     )
     existing_task_id = create_response.json()["id"]
@@ -73,5 +85,5 @@ def test_task_detail(client):
     assert response.status_code == 200
     assert response.json() == {
         "status": "success",
-        "result": 3,
+        "result": result,
     }
