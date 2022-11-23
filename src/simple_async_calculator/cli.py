@@ -1,7 +1,7 @@
 import click
 import uvicorn
 
-from simple_async_calculator.services.tasks import app
+from simple_async_calculator.api.handlers import app
 
 
 @click.group()
