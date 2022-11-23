@@ -57,13 +57,13 @@ def test_tasks_listing__with_task_items(client):
 
 
 @pytest.mark.parametrize(
-    'operator,result',
+    "operator,result",
     [
-        ('+', 10),
-        ('-', 6),
-        ('*', 16),
-        ('/', 4),
-    ]
+        ("+", 10),
+        ("-", 6),
+        ("*", 16),
+        ("/", 4),
+    ],
 )
 def test_task_detail(client, operator, result):
     """Тест метода API для получения резултьтатов вычислений"""
