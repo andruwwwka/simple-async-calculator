@@ -14,4 +14,4 @@ class CreateTaskRequest(BaseModel):
 class CreateTaskResponse(BaseModel):
     """Схема ответа ручки создания задачи"""
 
-    task_id: int = Field(title="Идентификатор созданной задачи на вычисление")
+    id: int = Field(title="Идентификатор созданной задачи на вычисление")
