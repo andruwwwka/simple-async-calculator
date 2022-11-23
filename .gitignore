@@ -1,0 +1,4 @@
+.idea
+.coverage
+pytest.xml
+pytest-coverage.txt
