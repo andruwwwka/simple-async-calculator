@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: poetry install --with pylint --without dev
+      - run: poetry install --with pylint,test --without dev
       - run: poetry run pylint --recursive=y .
   mypy:
     runs-on: ubuntu-latest
