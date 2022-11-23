@@ -1,4 +1,4 @@
-def test_create_tasks(client):
+def test_create_task(client):
     """Тест метода API создания задачи"""
     # act
     response = client.post(
