@@ -40,8 +40,6 @@ jobs:
         id: coverage
         run: |
           poetry run pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src --cov-fail-under=100 | tee pytest-coverage.txt
-          cov_fail=`cat ./pytest-coverage.txt | grep 'not reached'`
-          echo "cov_fail=$cov_fail" >> $GITHUB_OUTPUT
       - if: steps.coverage.outputs.cov_fail
         run: exit 1
       - name: Coverage comment
