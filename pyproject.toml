@@ -2,6 +2,11 @@
 disable = "missing-module-docstring"
 extension-pkg-whitelist = "pydantic"
 
+[tool.coverage.run]
+omit = [
+    "src/simple_async_calculator/cli.py",
+]
+
 [tool.poetry]
 name = "simple-async-calculator"
 version = "0.1.0"
