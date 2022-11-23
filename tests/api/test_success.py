@@ -1,4 +1,5 @@
 def test_create_tasks(client):
+    """Тест метода API создания задачи"""
     # act
     response = client.post(
         "/tasks",
@@ -15,6 +16,7 @@ def test_create_tasks(client):
 
 
 def test_tasks_listing__empty(client):
+    """Тест получения пустого списка задач через API"""
     # act
     response = client.get("/tasks")
 
@@ -24,6 +26,7 @@ def test_tasks_listing__empty(client):
 
 
 def test_tasks_listing__with_task_items(client):
+    """Тест получения списка задач через API"""
     # arrange
     create_response = client.post(
         "/tasks",
@@ -51,6 +54,7 @@ def test_tasks_listing__with_task_items(client):
 
 
 def test_task_detail(client):
+    """Тест метода API для получения резултьтатов вычислений"""
     # arrange
     create_response = client.post(
         "/tasks",
