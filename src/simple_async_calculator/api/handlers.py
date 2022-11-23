@@ -36,7 +36,7 @@ async def create_task_service(task: CreateTaskRequest) -> CreateTaskResponse:
         **task.dict(),
     )
     task_id = create_task(task_data)
-    return CreateTaskResponse(task_id=task_id)
+    return CreateTaskResponse(id=task_id)
 
 
 @app.get("/tasks", response_model=TaskListingResponse)
