@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path, status
+from fastapi import FastAPI, HTTPException, Path, status
 
 from simple_async_calculator.entities.api.create_task import (
     CreateTaskRequest,
@@ -13,6 +13,7 @@ from simple_async_calculator.entities.db.task import BaseTaskDB
 from simple_async_calculator.enums.status import Status
 from simple_async_calculator.services.calculator import calculate
 from simple_async_calculator.storage.task import (
+    TaskDoesNotExists,
     create_task,
     get_task_by_id,
     get_tasks,
@@ -51,7 +52,12 @@ async def task_detail_service(
     task_id: int = Path(description="Идентификатор задачи", ge=MIN_AVAILABLE_TASK_ID),
 ) -> TaskDetailResponse:
     """Сервис ручки получения результата задачи"""
-    task = get_task_by_id(task_id)
+    try:
+        task = get_task_by_id(task_id)
+    except TaskDoesNotExists as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        ) from exc
     result = calculate(x=task.x, y=task.y, operator=task.operator)
     updated_task = update_task(task_id=task_id, result=result, status=Status.SUCCESS)
     return TaskDetailResponse(**updated_task.dict())
