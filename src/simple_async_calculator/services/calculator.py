@@ -14,5 +14,7 @@ def calculate(*, x: int, y: int, operator: Operator) -> float:
             return x - y
         case Operator.DIVISION:
             return x / y
-        case _:
+        case Operator.MULTIPLICATION:
+            return x * y
+        case _:  # pragma: no cover
             raise UnsupportedOperation
