@@ -11,8 +11,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: poetry install --with pylint,test --without dev
-      - run: poetry run pylint --recursive=y .
+      - run: make install-deps pylint,test
+      - run: make pylint
   mypy:
     runs-on: ubuntu-latest
     steps:
@@ -23,8 +23,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: poetry install --with mypy,test --without dev
-      - run: poetry run mypy .
+      - run: make install-deps mypy,test
+      - run: make mypy
   test:
     runs-on: ubuntu-latest
     steps:
@@ -35,11 +35,11 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: poetry install --with test --without dev
+      - run: make install-deps test
       - name: Collect coverage
         id: coverage
         run: |
-          poetry run pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src --cov-fail-under=100 | tee pytest-coverage.txt
+          make test | tee pytest-coverage.txt
           cov_fail=`cat ./pytest-coverage.txt | grep 'not reached'` || echo ''
           echo "cov_fail=$cov_fail" >> $GITHUB_OUTPUT
       - if: steps.coverage.outputs.cov_fail
@@ -64,9 +64,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install isort
-      - run: isort .
       - run: pip install black
-      - run: black .
+      - run: make formatter
       - id: git-diff
         run: |
           diff_list=`git diff --name-only`
