@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: make install-deps pylint,test
+      - run: make install-deps deps=pylint,test
       - run: make pylint
   mypy:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: make install-deps mypy,test
+      - run: make install-deps deps=mypy,test
       - run: make mypy
   test:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install poetry
-      - run: make install-deps test
+      - run: make install-deps deps=test
       - name: Collect coverage
         id: coverage
         run: |
