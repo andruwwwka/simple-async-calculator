@@ -14,7 +14,7 @@ def cli():
 def serve(debug: bool, host: str, port: int) -> None:
     """Команда запкска сервиса разработки"""
     uvicorn.run(
-        "simple_async_calculator.cli:app",
+        "simple_async_calculator.api.handlers:app",
         host=host,
         port=port,
         log_level="debug" if debug else "warning",
