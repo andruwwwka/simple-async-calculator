@@ -11,3 +11,6 @@ class TaskDetailResponse(BaseModel):
         title="Результат выполнения математической операции",
         default=None,
     )
+
+    class Config:
+        orm_mode = True

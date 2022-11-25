@@ -9,6 +9,9 @@ class TaskItem(BaseModel):
     id: int = Field(title="Идентификатор задачи")
     status: Status = Field(title="Статус выполнения задачи")
 
+    class Config:
+        orm_mode = True
+
 
 class TaskListingResponse(BaseModel):
     """Схема ответа ручки листинга задач"""
