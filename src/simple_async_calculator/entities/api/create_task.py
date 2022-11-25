@@ -15,3 +15,6 @@ class CreateTaskResponse(BaseModel):
     """Схема ответа ручки создания задачи"""
 
     id: int = Field(title="Идентификатор созданной задачи на вычисление")
+
+    class Config:
+        orm_mode = True

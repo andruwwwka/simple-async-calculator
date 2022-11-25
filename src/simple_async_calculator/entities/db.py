@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 from simple_async_calculator.enums.operator import Operator
@@ -11,6 +13,8 @@ class BaseTaskDB(BaseModel):
     y: int
     operator: Operator
     status: Status
+    created: datetime
+    updated: datetime
 
 
 class TaskDB(BaseTaskDB):
@@ -18,3 +22,6 @@ class TaskDB(BaseTaskDB):
 
     id: int
     result: float | None = None
+
+    class Config:
+        orm_mode = True

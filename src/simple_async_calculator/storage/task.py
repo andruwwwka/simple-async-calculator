@@ -1,42 +1,36 @@
-from simple_async_calculator.entities.db.task import BaseTaskDB, TaskDB
+from sqlalchemy import select, update
+from sqlalchemy.orm import Session
+
+from simple_async_calculator.entities.db import BaseTaskDB
 from simple_async_calculator.enums.status import Status
-
-TASKS_CONTAINER: list[TaskDB] = []
-
-
-class TaskDoesNotExists(Exception):
-    """Исключение при невозможности получить задачу"""
+from simple_async_calculator.storage.tables import Task
 
 
-def create_task(task: BaseTaskDB) -> int:
-    """Создание задачи в хранилище"""
-    task_id = len(TASKS_CONTAINER) + 1
-    TASKS_CONTAINER.append(
-        TaskDB(
-            id=task_id,
+class TaskDAL:
+    def __init__(self, db_session: Session) -> None:
+        self.db_session = db_session
+
+    async def create(self, task: BaseTaskDB):
+        new_task = Task(
             **task.dict(),
         )
-    )
-    return task_id
+        self.db_session.add(new_task)
+        await self.db_session.flush()
+        return new_task
 
+    async def get_one(self, task_id):
+        task = await self.db_session.execute(select(Task).where(Task.id == task_id))
+        return task.scalar()
 
-def get_tasks() -> list[TaskDB]:
-    """Получение всех задач из хранилища"""
-    return TASKS_CONTAINER
+    async def get_all(self):
+        tasks = await self.db_session.execute(select(Task))
+        return tasks.scalars().all()
 
-
-def get_task_by_id(task_id: int) -> TaskDB:
-    """Получение из хранилища конкретной задачи"""
-    try:
-        return next(filter(lambda tsk: tsk.id == task_id, TASKS_CONTAINER))
-    except StopIteration as exc:
-        raise TaskDoesNotExists from exc
-
-
-def update_task(*, task_id: int, result: float, status: Status) -> TaskDB:
-    """Обновление задачи в хранилище"""
-    task = get_task_by_id(task_id)
-    task.result = result
-    task.status = status
-    TASKS_CONTAINER[task_id - 1] = task
-    return task
+    async def update(self, *, task_id: int, result: float, status: Status):
+        task = await self.db_session.execute(
+            update(Task)
+            .where(Task.id == task_id)
+            .values(result=result, status=status)
+            .returning(Task)
+        )
+        return task.scalar()
