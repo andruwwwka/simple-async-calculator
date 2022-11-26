@@ -58,6 +58,7 @@ jobs:
       - uses: ntsd/auto-request-changes-action@v2
         if: failure()
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-body: Auto checks failed
       - uses: hmarr/auto-approve-action@v3
         if: success()
