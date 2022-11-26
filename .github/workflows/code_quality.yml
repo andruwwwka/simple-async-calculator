@@ -56,6 +56,7 @@ jobs:
           junitxml-path: ./pytest.xml
           create-new-comment: true
       - uses: ntsd/auto-request-changes-action@v2
+        if: failure()
         with:
           comment-body: Auto checks failed
       - uses: hmarr/auto-approve-action@v3
