@@ -23,7 +23,7 @@ async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession
 Base = declarative_base()
 
 
-async def setup():
+async def setup():  # pragma: no cover
     """Создание базы данных при запуске приложения"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
