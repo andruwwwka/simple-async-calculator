@@ -1,17 +1,22 @@
-def test_task_detail(client):
+import pytest
+
+
+@pytest.mark.anyio
+async def test_task_detail(client):
     """Тест запроса результата несуществующей задачи"""
     # act
-    response = client.get("/tasks/1")
+    response = await client.get("/tasks/1")
 
     # assert
     assert response.status_code == 404
     assert response.json() == {"detail": "Task not found"}
 
 
-def test_task_detail__invalid_id(client):
+@pytest.mark.anyio
+async def test_task_detail__invalid_id(client):
     """Тест обработки некорректного id задачи в ручке результата задачи"""
     # act
-    response = client.get("/tasks/0")
+    response = await client.get("/tasks/0")
 
     # assert
     assert response.status_code == 422
@@ -27,10 +32,11 @@ def test_task_detail__invalid_id(client):
     }
 
 
-def test_create_task__invalid_operator(client):
+@pytest.mark.anyio
+async def test_create_task__invalid_operator(client):
     """Обработки неподдерживаемого оператора в ручке создания задачи"""
     # act
-    response = client.post(
+    response = await client.post(
         "/tasks",
         json={
             "x": 454,

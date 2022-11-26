@@ -3,7 +3,16 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 from simple_async_calculator.settings import settings
 
-engine = create_async_engine(f"postgresql+asyncpg://{settings.db_user}:{settings.db_password}@db:5432/{settings.db_name}")
+engine = create_async_engine(
+    (
+        "postgresql+asyncpg://"
+        f"{settings.db_user}:"
+        f"{settings.db_password}@"
+        f"{settings.db_host}"
+        ":5432/"
+        f"{settings.db_name}"
+    )
+)
 
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 

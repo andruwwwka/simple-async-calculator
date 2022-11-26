@@ -10,8 +10,8 @@ from simple_async_calculator.entities.api.task_detail import TaskDetailResponse
 from simple_async_calculator.entities.api.tasks_listing import TaskListingResponse
 from simple_async_calculator.entities.db import BaseTaskDB
 from simple_async_calculator.enums.status import Status
-from simple_async_calculator.storage import setup
 from simple_async_calculator.services.calculator import calculate
+from simple_async_calculator.storage import setup
 from simple_async_calculator.storage.dependencies import get_task_dal
 from simple_async_calculator.storage.task import TaskDAL
 
