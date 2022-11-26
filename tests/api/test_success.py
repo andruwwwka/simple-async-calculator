@@ -1,10 +1,11 @@
 import pytest
 
 
-def test_create_task(client):
+@pytest.mark.anyio
+async def test_create_task(client):
     """Тест метода API создания задачи"""
     # act
-    response = client.post(
+    response = await client.post(
         "/tasks",
         json={
             "x": 1,
@@ -18,20 +19,22 @@ def test_create_task(client):
     assert response.json() == {"id": 1}
 
 
-def test_tasks_listing__empty(client):
+@pytest.mark.anyio
+async def test_tasks_listing__empty(client):
     """Тест получения пустого списка задач через API"""
     # act
-    response = client.get("/tasks")
+    response = await client.get("/tasks")
 
     # assert
     assert response.status_code == 200
     assert response.json() == {"tasks": []}
 
 
-def test_tasks_listing__with_task_items(client):
+@pytest.mark.anyio
+async def test_tasks_listing__with_task_items(client):
     """Тест получения списка задач через API"""
     # arrange
-    create_response = client.post(
+    create_response = await client.post(
         "/tasks",
         json={
             "x": 1,
@@ -42,7 +45,7 @@ def test_tasks_listing__with_task_items(client):
     existing_task_id = create_response.json()["id"]
 
     # act
-    response = client.get("/tasks")
+    response = await client.get("/tasks")
 
     # assert
     assert response.status_code == 200
@@ -56,6 +59,7 @@ def test_tasks_listing__with_task_items(client):
     }
 
 
+@pytest.mark.anyio
 @pytest.mark.parametrize(
     "operator,result",
     [
@@ -65,10 +69,10 @@ def test_tasks_listing__with_task_items(client):
         ("/", 4),
     ],
 )
-def test_task_detail(client, operator, result):
+async def test_task_detail(client, operator, result):
     """Тест метода API для получения резултьтатов вычислений"""
     # arrange
-    create_response = client.post(
+    create_response = await client.post(
         "/tasks",
         json={
             "x": 8,
@@ -79,7 +83,7 @@ def test_task_detail(client, operator, result):
     existing_task_id = create_response.json()["id"]
 
     # act
-    response = client.get(f"/tasks/{existing_task_id}")
+    response = await client.get(f"/tasks/{existing_task_id}")
 
     # assert
     assert response.status_code == 200
