@@ -21,7 +21,7 @@ MIN_AVAILABLE_TASK_ID: int = 1
 
 
 @app.on_event("startup")
-async def startup():
+async def startup():  # pragma: no cover
     """Дополнительные действия, необходимые при старте приложения"""
     await setup()
 

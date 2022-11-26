@@ -2,6 +2,20 @@
 disable = "missing-module-docstring"
 extension-pkg-whitelist = "pydantic"
 
+[tool.coverage.run]
+branch = true
+source = ["./simple_async_calculator"]
+omit = [
+    "simple_async_calculator/storage/dependencies.py",
+]
+command_line = "-m pytest --junitxml=pytest.xml"
+concurrency = ["greenlet"]
+
+[tool.coverage.report]
+fial_under = 100
+skip_covered = true
+precision = 2
+
 [tool.mypy]
 ignore_missing_imports = true
 
