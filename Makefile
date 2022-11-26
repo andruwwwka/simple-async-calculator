@@ -1,10 +1,10 @@
 test:
-	poetry run pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=src --cov-fail-under=100
+	docker-compose up tests
+	docker-compose down
 
 formatter:
 	isort .
 	black .
-
 mypy:
 	poetry run mypy .
 

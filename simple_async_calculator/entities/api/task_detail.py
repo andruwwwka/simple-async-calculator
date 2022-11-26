@@ -12,5 +12,5 @@ class TaskDetailResponse(BaseModel):
         default=None,
     )
 
-    class Config:
+    class Config:  # pylint: disable=too-few-public-methods,missing-class-docstring
         orm_mode = True

@@ -10,7 +10,7 @@ services:
         - DB_PASSWORD=calc
         - DB_NAME=calc_db
         - DB_HOST=db
-      command: ["poetry", "run", "pytest", "--junitxml=pytest.xml", "--cov-report=term-missing:skip-covered", "--cov=src", "--cov-fail-under=100"]
+      command: ["sh", "shell/runtests.sh"]
       volumes:
         - ./:/app/
       depends_on:

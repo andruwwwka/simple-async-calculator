@@ -16,5 +16,5 @@ class CreateTaskResponse(BaseModel):
 
     id: int = Field(title="Идентификатор созданной задачи на вычисление")
 
-    class Config:
+    class Config:  # pylint: disable=too-few-public-methods,missing-class-docstring
         orm_mode = True

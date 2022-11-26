@@ -23,5 +23,5 @@ class TaskDB(BaseTaskDB):
     id: int
     result: float | None = None
 
-    class Config:
+    class Config:  # pylint: disable=too-few-public-methods,missing-class-docstring
         orm_mode = True

@@ -3,7 +3,9 @@ import sqlalchemy as sa
 from simple_async_calculator.storage import Base
 
 
-class Task(Base):
+class Task(Base):  # pylint: disable=too-few-public-methods
+    """Представление модели хранения данных о задачах"""
+
     __tablename__ = "tasks"
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)

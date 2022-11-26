@@ -2,6 +2,9 @@
 disable = "missing-module-docstring"
 extension-pkg-whitelist = "pydantic"
 
+[tool.mypy]
+ignore_missing_imports = true
+
 [tool.poetry]
 name = "simple-async-calculator"
 version = "0.1.0"
@@ -33,7 +36,7 @@ optional = true
 pytest = "^7.2.0"
 httpx = "^0.23.1"
 pytest-mock = "^3.10.0"
-pytest-cov = "^4.0.0"
+coverage = "^6.5.0"
 
 [tool.poetry.group.mypy.dependencies]
 mypy = "^0.991"

@@ -1,38 +1,32 @@
+# pylint: disable=redefined-outer-name
 import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from simple_async_calculator.api.handlers import app
-from simple_async_calculator.settings import settings
-from simple_async_calculator.storage import Base
+from simple_async_calculator.storage import Base, database_connection_string
 from simple_async_calculator.storage.dependencies import get_task_dal
 from simple_async_calculator.storage.task import TaskDAL
 
 
 @pytest.fixture
 def anyio_backend():
+    """Говорим anyio, что не используем trio"""
     return "asyncio"
 
 
 @pytest.fixture
 async def engine():
-    engine = create_async_engine(
-        (
-            "postgresql+asyncpg://"
-            f"{settings.db_user}:"
-            f"{settings.db_password}@"
-            f"{settings.db_host}"
-            ":5432/"
-            f"{settings.db_name}"
-        )
-    )
+    """Коннектимся к базе данных перед тестом и сбрасываем соединение после теста"""
+    engine = create_async_engine(database_connection_string())
     yield engine
     await engine.dispose()
 
 
 @pytest.fixture(autouse=True)
 async def create(engine):
+    """Создание таблиц до теста и удаление после"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
@@ -42,11 +36,14 @@ async def create(engine):
 
 @pytest.fixture
 def async_session(engine):
+    """Фикстура сессии к базе данных"""
     return sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
 @pytest.fixture
 def override_dependency(async_session):
+    """Переопределяем в зависимости сессию на тестовую"""
+
     async def override_get_task_dal():
         async with async_session() as session:
             async with session.begin():
@@ -57,6 +54,7 @@ def override_dependency(async_session):
 
 @pytest.fixture
 async def client(override_dependency):
+    """Клиент для API"""
     app.dependency_overrides[get_task_dal] = override_dependency
     async with AsyncClient(app=app, base_url="http://test") as client:
         yield client
