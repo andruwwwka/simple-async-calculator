@@ -22,6 +22,7 @@ MIN_AVAILABLE_TASK_ID: int = 1
 
 @app.on_event("startup")
 async def startup():
+    """Дополнительные действия, необходимые при старте приложения"""
     await setup()
 
 
@@ -41,8 +42,8 @@ async def create_task_service(
         status=Status.PENDING,
         **task.dict(),
     )
-    task = await task_dal.create(task_data)
-    return task
+    created_task = await task_dal.create(task_data)
+    return created_task
 
 
 @app.get("/tasks", response_model=TaskListingResponse)
@@ -65,8 +66,7 @@ async def task_detail_service(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
         )
-    else:
-        result = calculate(x=_task.x, y=_task.y, operator=_task.operator)
-        await task_dal.update(task_id=task_id, result=result, status=Status.SUCCESS)
-        task = await task_dal.get_one(task_id)
-        return task
+    result = calculate(x=_task.x, y=_task.y, operator=_task.operator)
+    await task_dal.update(task_id=task_id, result=result, status=Status.SUCCESS)
+    task = await task_dal.get_one(task_id)
+    return task

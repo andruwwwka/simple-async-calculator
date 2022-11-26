@@ -9,7 +9,7 @@ class TaskItem(BaseModel):
     id: int = Field(title="Идентификатор задачи")
     status: Status = Field(title="Статус выполнения задачи")
 
-    class Config:
+    class Config:  # pylint: disable=too-few-public-methods,missing-class-docstring
         orm_mode = True
 
 

@@ -39,10 +39,15 @@ jobs:
       - name: Collect coverage
         id: coverage
         run: |
-          make test | tee pytest-coverage.txt
-          cov_fail=`cat ./pytest-coverage.txt | grep 'not reached'` || echo ''
+          make test
+          cov_fail=`cat ./pytest-coverage.txt | grep 'is less than fail-under'` || echo ''
           echo "cov_fail=$cov_fail" >> $GITHUB_OUTPUT
-      - if: steps.coverage.outputs.cov_fail
+          test_fails=`cat ./pytest.xml | grep '</failure>'` || echo ''
+          echo "test_fails=$test_fails" >> $GITHUB_OUTPUT
+          test_errors=`cat ./pytest.xml | grep '</error>'` || echo ''
+          echo "test_errors=$test_errors" >> $GITHUB_OUTPUT
+      - if: |
+          steps.coverage.outputs.cov_fail || steps.coverage.outputs.test_fails || steps.coverage.outputs.test_errors
         run: exit 1
       - name: Coverage comment
         if: failure()
