@@ -34,6 +34,3 @@ endif
 else
 	uvicorn simple_async_calculator.api.handler:app
 endif
-
-run-db:
-	docker run -e POSTGRES_USER=calc -e POSTGRES_PASSWORD=calc -e POSTGRES_DB=calc_db -p 5432:5432 postgres:15.1
