@@ -5,7 +5,7 @@ class UnsupportedOperation(Exception):
     """Исключение для неподдерживаемой операции"""
 
 
-def calculate(*, x: int, y: int, operator: Operator) -> float:
+def calculate(*, x: int, y: int, operator: str) -> float:
     """Вычисление результата калькулятора"""
     match operator:
         case Operator.SUMMATION:
@@ -16,5 +16,5 @@ def calculate(*, x: int, y: int, operator: Operator) -> float:
             return x / y
         case Operator.MULTIPLICATION:
             return x * y
-        case _:  # pragma: no cover
+        case _:
             raise UnsupportedOperation

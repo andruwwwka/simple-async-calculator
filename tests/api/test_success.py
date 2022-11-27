@@ -1,5 +1,8 @@
 import pytest
 
+from simple_async_calculator.enums.operator import Operator
+from simple_async_calculator.enums.status import Status
+
 
 @pytest.mark.anyio
 async def test_create_task(client):
@@ -10,7 +13,7 @@ async def test_create_task(client):
         json={
             "x": 1,
             "y": 2,
-            "operator": "+",
+            "operator": Operator.SUMMATION.value,
         },
     )
 
@@ -39,7 +42,7 @@ async def test_tasks_listing__with_task_items(client):
         json={
             "x": 1,
             "y": 2,
-            "operator": "+",
+            "operator": Operator.SUMMATION.value,
         },
     )
     existing_task_id = create_response.json()["id"]
@@ -53,23 +56,14 @@ async def test_tasks_listing__with_task_items(client):
         "tasks": [
             {
                 "id": existing_task_id,
-                "status": "pending",
+                "status": Status.PENDING.value,
             },
         ],
     }
 
 
 @pytest.mark.anyio
-@pytest.mark.parametrize(
-    "operator,result",
-    [
-        ("+", 10),
-        ("-", 6),
-        ("*", 16),
-        ("/", 4),
-    ],
-)
-async def test_task_detail(client, operator, result):
+async def test_task_detail(client):
     """Тест метода API для получения резултьтатов вычислений"""
     # arrange
     create_response = await client.post(
@@ -77,7 +71,7 @@ async def test_task_detail(client, operator, result):
         json={
             "x": 8,
             "y": 2,
-            "operator": operator,
+            "operator": Operator.SUMMATION.value,
         },
     )
     existing_task_id = create_response.json()["id"]
@@ -88,6 +82,6 @@ async def test_task_detail(client, operator, result):
     # assert
     assert response.status_code == 200
     assert response.json() == {
-        "status": "success",
-        "result": result,
+        "status": Status.PENDING.value,
+        "result": None,
     }
