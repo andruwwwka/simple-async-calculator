@@ -25,3 +25,12 @@ class TaskDB(BaseTaskDB):
 
     class Config:  # pylint: disable=too-few-public-methods,missing-class-docstring
         orm_mode = True
+
+
+class UpdateTaskDB(BaseModel):
+    """Модель данных для функции обновления записи в базе данных"""
+
+    id: int
+    updated: datetime
+    status: Status
+    result: float | None

@@ -1,7 +1,7 @@
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
-from simple_async_calculator.entities.db import BaseTaskDB
+from simple_async_calculator.entities.db import BaseTaskDB, UpdateTaskDB
 from simple_async_calculator.enums.status import Status
 from simple_async_calculator.storage.tables import Task
 
@@ -27,17 +27,25 @@ class TaskDAL:
         task = await self.db_session.execute(select(Task).where(Task.id == task_id))
         return task.scalar()
 
-    async def get_all(self) -> list[Task]:
+    async def get_all(self, status: Status | None = None) -> list[Task]:
         """Получение всех задачи из базы данных"""
-        tasks = await self.db_session.execute(select(Task))
+        stmt = select(Task)
+        if status:
+            stmt = stmt.where(Task.status == status.value)
+        tasks = await self.db_session.execute(stmt)
         return tasks.scalars().all()
 
-    async def update(self, *, task_id: int, result: float, status: Status) -> Task:
+    async def update(self, task_data: UpdateTaskDB) -> Task:
         """Обновление задачи в базе данных"""
-        task = await self.db_session.execute(
+        stmt = (
             update(Task)
-            .where(Task.id == task_id)
-            .values(result=result, status=status)
-            .returning(Task)
+            .where(Task.id == task_data.id)
+            .values(
+                updated=task_data.updated,
+                status=task_data.status,
+            )
         )
+        if task_data.result is not None:
+            stmt = stmt.values(result=task_data.result)
+        task = await self.db_session.execute(stmt.returning(Task))
         return task.scalar()
