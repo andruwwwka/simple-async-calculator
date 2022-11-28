@@ -5,7 +5,7 @@ import pytest
 async def test_task_detail(client):
     """Тест запроса результата несуществующей задачи"""
     # act
-    response = await client.get("/tasks/1")
+    response = await client.get("/api/tasks/1/")
 
     # assert
     assert response.status_code == 404
@@ -16,7 +16,7 @@ async def test_task_detail(client):
 async def test_task_detail__invalid_id(client):
     """Тест обработки некорректного id задачи в ручке результата задачи"""
     # act
-    response = await client.get("/tasks/0")
+    response = await client.get("/api/tasks/0/")
 
     # assert
     assert response.status_code == 422
@@ -37,7 +37,7 @@ async def test_create_task__invalid_operator(client):
     """Обработки неподдерживаемого оператора в ручке создания задачи"""
     # act
     response = await client.post(
-        "/tasks",
+        "/api/tasks/",
         json={
             "x": 454,
             "y": 26,
