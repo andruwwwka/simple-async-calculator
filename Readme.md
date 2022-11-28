@@ -50,7 +50,7 @@ make formatter
 ```
 make install-deps
 ```
-Установка конкретных групп зависимсотей, объявленных в pyproject.toml:
+Установка конкретных групп зависимостей, объявленных в pyproject.toml:
 ```
 make install-deps deps=[COMMA_SEPARATED_GROUPS]
 ```
