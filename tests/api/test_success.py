@@ -9,7 +9,7 @@ async def test_create_task(client):
     """Тест метода API создания задачи"""
     # act
     response = await client.post(
-        "/tasks",
+        "/api/tasks/",
         json={
             "x": 1,
             "y": 2,
@@ -26,7 +26,7 @@ async def test_create_task(client):
 async def test_tasks_listing__empty(client):
     """Тест получения пустого списка задач через API"""
     # act
-    response = await client.get("/tasks")
+    response = await client.get("/api/tasks/")
 
     # assert
     assert response.status_code == 200
@@ -38,7 +38,7 @@ async def test_tasks_listing__with_task_items(client):
     """Тест получения списка задач через API"""
     # arrange
     create_response = await client.post(
-        "/tasks",
+        "/api/tasks/",
         json={
             "x": 1,
             "y": 2,
@@ -48,7 +48,7 @@ async def test_tasks_listing__with_task_items(client):
     existing_task_id = create_response.json()["id"]
 
     # act
-    response = await client.get("/tasks")
+    response = await client.get("/api/tasks/")
 
     # assert
     assert response.status_code == 200
@@ -67,7 +67,7 @@ async def test_task_detail(client):
     """Тест метода API для получения резултьтатов вычислений"""
     # arrange
     create_response = await client.post(
-        "/tasks",
+        "/api/tasks/",
         json={
             "x": 8,
             "y": 2,
@@ -77,7 +77,7 @@ async def test_task_detail(client):
     existing_task_id = create_response.json()["id"]
 
     # act
-    response = await client.get(f"/tasks/{existing_task_id}")
+    response = await client.get(f"/api/tasks/{existing_task_id}/")
 
     # assert
     assert response.status_code == 200

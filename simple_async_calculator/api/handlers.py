@@ -19,7 +19,7 @@ task_router = APIRouter()
 
 
 @task_router.post(
-    "/tasks",
+    "/api/tasks/",
     response_model=CreateTaskResponse,
     status_code=status.HTTP_201_CREATED,
 )
@@ -38,7 +38,7 @@ async def create_task_service(
     return created_task
 
 
-@task_router.get("/tasks", response_model=TaskListingResponse)
+@task_router.get("/api/tasks/", response_model=TaskListingResponse)
 async def tasks_listing_service(
     task_dal: TaskDAL = Depends(get_task_dal),
 ) -> TaskListingResponse:
@@ -47,7 +47,7 @@ async def tasks_listing_service(
     return TaskListingResponse(tasks=tasks)
 
 
-@task_router.get("/tasks/{task_id}", response_model=TaskDetailResponse)
+@task_router.get("/api/tasks/{task_id}/", response_model=TaskDetailResponse)
 async def task_detail_service(
     task_id: int = Path(description="Идентификатор задачи", ge=MIN_AVAILABLE_TASK_ID),
     task_dal: TaskDAL = Depends(get_task_dal),
