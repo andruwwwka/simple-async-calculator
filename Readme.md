@@ -48,15 +48,15 @@ make formatter
 ## Установка зависимостей
 Установка dev зависимостей:
 ```
-make install
+make install-deps
 ```
 Установка конкретных групп зависимсотей, объявленных в pyproject.toml:
 ```
-make install deps=[COMMA_SEPARATED_GROUPS]
+make install-deps deps=[COMMA_SEPARATED_GROUPS]
 ```
 Установка зависимостей prod окружения:
 ```
-make install deps=production
+make install-deps deps=production
 ```
 ## Запуск приложения
 Запуск приложения в production окружении:
