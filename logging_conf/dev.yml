@@ -24,3 +24,8 @@ loggers:
     handlers:
       - default
     propagate: no
+  timings:
+    level: INFO
+    handlers:
+      - default
+    propagate: no
