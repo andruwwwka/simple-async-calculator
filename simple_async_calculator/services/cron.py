@@ -32,7 +32,9 @@ async def process_task(*, dal: TaskDAL, task: Task):
                 status=Status.SUCCESS,
             )
         )
-        cron_logger.debug("Calculate Task(id=%s) succeed with result %s", task.id, result)
+        cron_logger.debug(
+            "Calculate Task(id=%s) succeed with result %s", task.id, result
+        )
     except (IntegrityError, UnsupportedOperation) as exc:
         await dal.update(
             UpdateTaskDB(
