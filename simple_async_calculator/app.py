@@ -16,7 +16,7 @@ async def startup():  # pragma: no cover
     await setup()
 
 
-@aiocron.crontab("* * * * */30")
+@aiocron.crontab("* * * * *")
 async def calculate_tasks():  # pragma: no cover
     """Объявление крон-задачи для расчета результатов.
 
