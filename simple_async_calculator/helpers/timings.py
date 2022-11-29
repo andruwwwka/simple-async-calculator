@@ -30,6 +30,7 @@ stats_timing_collector = LoggerStatsTiming()
 
 def timer(func) -> Callable:
     """Декоратор для вычисления времени выполнения функции"""
+
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         start_time = time.perf_counter()
