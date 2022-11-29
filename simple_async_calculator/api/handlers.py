@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
@@ -12,6 +13,8 @@ from simple_async_calculator.entities.db import BaseTaskDB
 from simple_async_calculator.enums.status import Status
 from simple_async_calculator.storage.dependencies import get_task_dal
 from simple_async_calculator.storage.task import TaskDAL
+
+handlers_logger = logging.getLogger("api")
 
 MIN_AVAILABLE_TASK_ID: int = 1
 
@@ -35,6 +38,7 @@ async def create_task_service(
         **task.dict(),
     )
     created_task = await task_dal.create(task_data)
+    handlers_logger.debug("Create Task(id=%s)", created_task.id)
     return created_task
 
 

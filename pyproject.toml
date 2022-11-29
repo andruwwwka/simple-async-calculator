@@ -35,6 +35,7 @@ asyncpg = "^0.27.0"
 greenlet = "^2.0.1"
 pydantic = {extras = ["dotenv"], version = "^1.10.2"}
 aiocron = "^1.8"
+pyyaml = "^6.0"
 
 [tool.poetry.group.pylint]
 optional = true
