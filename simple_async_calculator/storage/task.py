@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from simple_async_calculator.entities.db import BaseTaskDB, UpdateTaskDB
 from simple_async_calculator.enums.status import Status
 from simple_async_calculator.helpers.timings import timer
+from simple_async_calculator.helpers.tracing import InMemoryTracing
 from simple_async_calculator.storage.tables import Task
 
 
@@ -22,6 +23,8 @@ class TaskDAL:
         )
         self.db_session.add(new_task)
         await self.db_session.flush()
+        with InMemoryTracing(new_task.id) as tracer:
+            tracer.add_event({"action": "create", "at": new_task.created})
         return new_task
 
     @timer
@@ -52,5 +55,14 @@ class TaskDAL:
         )
         if task_data.result is not None:
             stmt = stmt.values(result=task_data.result)
-        task = await self.db_session.execute(stmt.returning(Task))
-        return task.scalar()
+        cursor = await self.db_session.execute(stmt.returning(Task))
+        task_id = cursor.scalar()
+        with InMemoryTracing(task_id) as tracer:
+            tracer.add_event(
+                {
+                    "action": "update",
+                    "at": task_data.updated,
+                    "data": {"status": task_data.status, "result": task_data.result},
+                }
+            )
+        return task_id

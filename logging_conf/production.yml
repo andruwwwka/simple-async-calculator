@@ -24,3 +24,8 @@ loggers:
     handlers:
       - default
     propagate: no
+  tracing:
+    level: INFO
+    handlers:
+      - default
+    propagate: no
