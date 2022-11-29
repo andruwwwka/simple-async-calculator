@@ -20,5 +20,5 @@ async def startup():  # pragma: no cover
 async def calculate_tasks():  # pragma: no cover
     """Объявление крон-задачи для расчета результатов.
 
-    Запускается 1 раз в 30 секунд"""
+    Запускается 1 раз в минуту"""
     await cron_service()

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from simple_async_calculator.entities.db import BaseTaskDB, UpdateTaskDB
 from simple_async_calculator.enums.status import Status
+from simple_async_calculator.helpers.timings import timer
 from simple_async_calculator.storage.tables import Task
 
 
@@ -13,6 +14,7 @@ class TaskDAL:
         """Создание объекта слоя доступа к данным"""
         self.db_session = db_session
 
+    @timer
     async def create(self, task: BaseTaskDB) -> Task:
         """Создание в базе данных записи с задачей"""
         new_task = Task(
@@ -22,11 +24,13 @@ class TaskDAL:
         await self.db_session.flush()
         return new_task
 
+    @timer
     async def get_one(self, task_id: int) -> Task:
         """Получение задачи из базы данных по ID"""
         task = await self.db_session.execute(select(Task).where(Task.id == task_id))
         return task.scalar()
 
+    @timer
     async def get_all(self, status: Status | None = None) -> list[Task]:
         """Получение всех задачи из базы данных"""
         stmt = select(Task)
@@ -35,6 +39,7 @@ class TaskDAL:
         tasks = await self.db_session.execute(stmt)
         return tasks.scalars().all()
 
+    @timer
     async def update(self, task_data: UpdateTaskDB) -> Task:
         """Обновление задачи в базе данных"""
         stmt = (
