@@ -24,14 +24,15 @@ jobs:
           registry: docker.io
           addLatest: true
           dockerfile: docker/prod.Dockerfile
-          username: "$DOCKER_REGISTRY_LOGIN"
-          password: "$DOCKER_REGISTRY_PWD"
+          username: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
+          password: ${{ secrets.DOCKER_REGISTRY_PWD }}
   deploy:
     name: Deploy production
     runs-on: ubuntu-latest
     steps:
       - name: Configure ssh client
         run: |
+          eval `ssh-agent -s`
           echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
