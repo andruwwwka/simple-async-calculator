@@ -13,7 +13,7 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Build image
         run: docker build -f docker/prod.Dockerfile -t andruwwwka/simple-async-calc:latest .
-      - name: Docker login
-        run: docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD"
-      - name: Push image
-        run: docker push andruwwwka/simple-async-calc:latest
+      - name: Docker push
+        run: |
+          docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD"
+          docker push andruwwwka/simple-async-calc:latest
