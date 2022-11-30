@@ -6,16 +6,11 @@ env:
 jobs:
   build:
     name: Build image
+    if: github.event.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
