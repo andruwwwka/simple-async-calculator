@@ -1,12 +1,8 @@
 name: Production deployment
 on: [workflow_dispatch]
 env:
-  DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
-  DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
   DOCKER_IMAGE: andruwwwka/simple-async-calc
   DOCKER_REGISTRY: docker.io
-  PROD_USER: ${{ secrets.PROD_USER }}
-  PROD_HOST: ${{ secrets.PROD_HOST }}
 jobs:
   build:
     name: Build image
@@ -36,8 +32,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
       - name: Docker login
-        run: ssh -o "StrictHostKeyChecking=no" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
+        run: ssh -o "StrictHostKeyChecking=no" ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker login -u ${{ secrets.DOCKER_REGISTRY_LOGIN }} -p ${{ secrets.DOCKER_REGISTRY_PWD }} "$DOCKER_REGISTRY"
       - name: Pull Docker image
-        run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
+        run: ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker-compose pull webapp
       - name: Deploy
-        run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose up -d
+        run: ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker-compose up -d
