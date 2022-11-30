@@ -1,6 +1,6 @@
 FROM python:3.11.0-slim
 
-RUN apt-get update && apt-get install make
+RUN apt-get update && apt-get install make && apt-get install netcat
 RUN pip install poetry
 WORKDIR /app/
 COPY poetry.lock .
