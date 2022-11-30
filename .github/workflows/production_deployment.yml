@@ -6,7 +6,6 @@ env:
 jobs:
   build:
     name: Build image
-    if: github.repository == 'octo-org/octo-repo-prod'
     runs-on: ubuntu-latest
     steps:
       - name: Context
