@@ -18,4 +18,4 @@ jobs:
       - name: Tag image
         run: docker tag simple-async-calc "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:${{ github.sha }}
       - name: Push image
-        run: docker push "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:${{ github.sha }}
+        run: docker push "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:latest
