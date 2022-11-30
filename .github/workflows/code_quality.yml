@@ -5,54 +5,54 @@ jobs:
     runs-on: ubuntu-latest
     name: Run pylint checks
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-python@v4
-        name: Install Poetry
+      - name: Install Poetry
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install poetry
-        name: Install Poetry
-      - run: make install-deps deps=pylint,test
-        name: Install dependencies
-      - run: make pylint
-        name: Run pylint checker
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Install dependencies
+        run: make install-deps deps=pylint,test
+      - name: Run pylint checker
+        run: make pylint
   mypy:
     runs-on: ubuntu-latest
     name: Run mypy checks
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-python@v4
-        name: Install Python
+      - name: Install Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install poetry
-        name: Install Poetry
-      - run: make install-deps deps=mypy,test
-        name: Install dependencies
-      - run: make mypy
-        name: Run mypy checker
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Install dependencies
+        run: make install-deps deps=mypy,test
+      - name: Run mypy checker
+        run: make mypy
   test:
     runs-on: ubuntu-latest
     name: Run tests and collect coverage report
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-python@v4
-        name: Install Python
+      - name: Install Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install poetry
-        name: Install Poetry
-      - run: make install-deps deps=test
-        name: Install dependencies
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Install dependencies
+        run: make install-deps deps=test
       - name: Collect coverage
         id: coverage
         run: |
@@ -63,9 +63,9 @@ jobs:
           echo "test_fails=$test_fails" >> $GITHUB_OUTPUT
           test_errors=`cat ./pytest.xml | grep '</error>'` || echo ''
           echo "test_errors=$test_errors" >> $GITHUB_OUTPUT
-      - if: |
+      - name: Check bad tests report
+        if: |
           steps.coverage.outputs.cov_fail || steps.coverage.outputs.test_fails || steps.coverage.outputs.test_errors
-        name: Check bad tests report
         run: exit 1
       - name: Coverage report comment
         if: failure()
@@ -73,14 +73,14 @@ jobs:
         with:
           junitxml-path: ./pytest.xml
           create-new-comment: true
-      - uses: ntsd/auto-request-changes-action@v2
-        name: Pull request failure message
+      - name: Pull request failure message
+        uses: ntsd/auto-request-changes-action@v2
         if: failure()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-body: Auto checks failed
-      - uses: hmarr/auto-approve-action@v3
-        name: Pull request success message
+      - name: Pull request success message
+        uses: hmarr/auto-approve-action@v3
         if: success()
         with:
           review-message: Auto checks succeed
@@ -92,27 +92,27 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-python@v4
-        name: Install Python
+      - name: Install Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install isort
-        name: Install isort
-      - run: pip install black
-        name: Install black
-      - run: make formatter
-        name: Run formatter
-      - id: git-diff
-        name: Check changed files
+      - name: Install isort
+        run: pip install isort
+      - name: Install black
+        run: pip install black
+      - name: Run formatter
+        run: make formatter
+      - name: Check changed files
+        id: git-diff
         run: |
           diff_list=`git diff --name-only`
           echo "diff=$diff_list" >> $GITHUB_OUTPUT
-      - if: steps.git-diff.outputs.diff
-        name: Autoformat commit
+      - name: Autoformat commit
+        if: steps.git-diff.outputs.diff
         run: |
           git config --global user.name github-actions
           git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          
