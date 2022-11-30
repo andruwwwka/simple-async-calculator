@@ -1,5 +1,8 @@
 name: Production deployment
 on: [workflow_dispatch]
+env:
+  DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
+  DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
 jobs:
   build:
     name: Build image
@@ -11,7 +14,8 @@ jobs:
       - name: Build image
         run: docker build -f docker/prod.Dockerfile -t simple-async-calc .
       - name: Docker login
-        env:
-          DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
-          DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
         run: docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD"
+      - name: Tag image
+        run: docker tag simple-async-calc "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:${{ github.sha }}
+      - name: Push image
+        run: docker push "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:${{ github.sha }}
