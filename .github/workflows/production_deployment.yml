@@ -4,7 +4,6 @@ env:
   DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
   DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
   DOCKER_IMAGE: andruwwwka/simple-async-calc
-  DOCKER_REGISTRY: docker.io
   PROD_USER: ${{ secrets.PROD_USER }}
   PROD_HOST: ${{ secrets.PROD_HOST }}
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
@@ -22,7 +21,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: "$DOCKER_IMAGE"
-          registry: "$DOCKER_REGISTRY"
+          registry: docker.io
           addLatest: true
           dockerfile: docker/prod.Dockerfile
           username: "$DOCKER_REGISTRY_LOGIN"
@@ -39,7 +38,7 @@ jobs:
           echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
       - name: Docker login
-        run: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
+        run: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" docker.io
       - name: Pull Docker image
         run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
       - name: Deploy
