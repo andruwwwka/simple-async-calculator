@@ -32,5 +32,6 @@ else
 	poetry run uvicorn --host 0.0.0.0 simple_async_calculator.app:app --reload --log-config=logging_conf/dev.yml
 endif
 else
+	while ! nc -z "${DB_HOST}" 5432; do sleep 1; done;
 	poetry run uvicorn --host 0.0.0.0 simple_async_calculator.app:app --log-config=logging_conf/dev.yml
 endif
