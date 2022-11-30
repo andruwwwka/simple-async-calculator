@@ -35,6 +35,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
+      - name: Add known hosts
+        run: |
+          echo ${{ secrets.KNOWN_HOSTS }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
       - name: Docker login
         run: ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
       - name: Pull Docker image
