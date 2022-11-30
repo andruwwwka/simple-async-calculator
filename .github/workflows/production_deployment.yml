@@ -4,6 +4,7 @@ env:
   DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
   DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
   DOCKER_IMAGE: andruwwwka/simple-async-calc
+  DOCKER_REGISTRY: andruwwwka/simple-async-calc
   PROD_USER: ${{ secrets.PROD_USER }}
   PROD_HOST: ${{ secrets.PROD_HOST }}
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
@@ -21,7 +22,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: "$DOCKER_IMAGE"
-          registry: docker.io
+          registry: "$DOCKER_REGISTRY"
           addLatest: true
           dockerfile: docker/prod.Dockerfile
           username: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
@@ -33,13 +34,13 @@ jobs:
       - name: Configure ssh client
         run: |
           eval `ssh-agent -s`
-          echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
+          echo ${{ secrets.PRIVATE_KEY }} | tr -d '\r' | ssh-add -
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          echo ${{ secrets.KNOWN_HOSTS }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
       - name: Docker login
-        run: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" docker.io
+        run: ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
       - name: Pull Docker image
         run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
       - name: Deploy
