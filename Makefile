@@ -32,5 +32,5 @@ else
 	poetry run uvicorn --host 0.0.0.0 simple_async_calculator.app:app --reload --log-config=logging_conf/dev.yml
 endif
 else
-	uvicorn simple_async_calculator.api.handler:app --log-config=logging_conf/production.yml
+	poetry run uvicorn --host 0.0.0.0 simple_async_calculator.app:app --log-config=logging_conf/dev.yml
 endif
