@@ -3,7 +3,7 @@ on: [workflow_dispatch]
 env:
   DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
   DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
-  DOCKER_IMAGE: andruwwwka/simple-async-calc
+  DOCKER_IMAGE: docker.io
   DOCKER_REGISTRY: andruwwwka/simple-async-calc
   PROD_USER: ${{ secrets.PROD_USER }}
   PROD_HOST: ${{ secrets.PROD_HOST }}
@@ -32,13 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configure ssh client
-        run: |
-          eval `ssh-agent -s`
-          echo ${{ secrets.PRIVATE_KEY }} | tr -d '\r' | ssh-add -
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          echo ${{ secrets.KNOWN_HOSTS }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
       - name: Docker login
         run: ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
       - name: Pull Docker image
