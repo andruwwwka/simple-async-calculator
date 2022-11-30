@@ -32,15 +32,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configure ssh client
-        runs: |
+        run: |
           echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
       - name: Docker login
-        runs: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
+        run: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
       - name: Pull Docker image
-        runs: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
+        run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
       - name: Deploy
-        runs: ssh "$PROD_USER"@"$PROD_HOST" docker-compose up -d
+        run: ssh "$PROD_USER"@"$PROD_HOST" docker-compose up -d
