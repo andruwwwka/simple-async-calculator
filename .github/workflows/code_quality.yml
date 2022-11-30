@@ -3,39 +3,56 @@ on: [pull_request]
 jobs:
   pylint:
     runs-on: ubuntu-latest
+    name: Run pylint checks
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
         with:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v4
+        name: Install Poetry
         with:
           python-version: '3.11'
       - run: pip install poetry
+        name: Install Poetry
       - run: make install-deps deps=pylint,test
+        name: Install dependencies
       - run: make pylint
+        name: Run pylint checker
   mypy:
     runs-on: ubuntu-latest
+    name: Run mypy checks
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
         with:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v4
+        name: Install Python
         with:
           python-version: '3.11'
       - run: pip install poetry
+        name: Install Poetry
       - run: make install-deps deps=mypy,test
+        name: Install dependencies
       - run: make mypy
+        name: Run mypy checker
   test:
     runs-on: ubuntu-latest
+    name: Run tests and collect coverage report
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
         with:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v4
+        name: Install Python
         with:
           python-version: '3.11'
       - run: pip install poetry
+        name: Install Poetry
       - run: make install-deps deps=test
+        name: Install dependencies
       - name: Collect coverage
         id: coverage
         run: |
@@ -48,23 +65,27 @@ jobs:
           echo "test_errors=$test_errors" >> $GITHUB_OUTPUT
       - if: |
           steps.coverage.outputs.cov_fail || steps.coverage.outputs.test_fails || steps.coverage.outputs.test_errors
+        name: Check bad tests report
         run: exit 1
-      - name: Coverage comment
+      - name: Coverage report comment
         if: failure()
         uses: MishaKav/pytest-coverage-comment@main
         with:
           junitxml-path: ./pytest.xml
           create-new-comment: true
       - uses: ntsd/auto-request-changes-action@v2
+        name: Pull request failure message
         if: failure()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-body: Auto checks failed
       - uses: hmarr/auto-approve-action@v3
+        name: Pull request success message
         if: success()
         with:
           review-message: Auto checks succeed
   formatter:
+    name: Autoformat source code
     needs:
       - mypy
       - pylint
@@ -72,19 +93,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
         with:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v4
+        name: Install Python
         with:
           python-version: '3.11'
       - run: pip install isort
+        name: Install isort
       - run: pip install black
+        name: Install black
       - run: make formatter
+        name: Run formatter
       - id: git-diff
+        name: Check changed files
         run: |
           diff_list=`git diff --name-only`
           echo "diff=$diff_list" >> $GITHUB_OUTPUT
       - if: steps.git-diff.outputs.diff
+        name: Autoformat commit
         run: |
           git config --global user.name github-actions
           git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'          

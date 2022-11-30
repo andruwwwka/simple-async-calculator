@@ -3,20 +3,44 @@ on: [workflow_dispatch]
 env:
   DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
   DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
+  DOCKER_IMAGE: andruwwwka/simple-async-calc
+  DOCKER_REGISTRY: docker.io
+  PROD_USER: ${{ secrets.PROD_USER }}
+  PROD_HOST: ${{ secrets.PROD_HOST }}
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
 jobs:
   build:
     name: Build image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
         with:
           ref: ${{ github.head_ref }}
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
-          image: andruwwwka/simple-async-calc
-          registry: docker.io
+          image: "$DOCKER_IMAGE"
+          registry: "$DOCKER_REGISTRY"
           addLatest: true
           dockerfile: docker/prod.Dockerfile
-          username: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
-          password: ${{ secrets.DOCKER_REGISTRY_PWD }}
+          username: "$DOCKER_REGISTRY_LOGIN"
+          password: "$DOCKER_REGISTRY_PWD"
+  deploy:
+    name: Deploy production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure ssh client
+        runs: |
+          echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+      - name: Docker login
+        runs: ssh "$PROD_USER"@"$PROD_HOST" docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD" "$DOCKER_REGISTRY"
+      - name: Pull Docker image
+        runs: ssh "$PROD_USER"@"$PROD_HOST" docker-compose pull webapp
+      - name: Deploy
+        runs: ssh "$PROD_USER"@"$PROD_HOST" docker-compose up -d
