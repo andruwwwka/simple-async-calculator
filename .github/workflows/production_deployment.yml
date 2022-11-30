@@ -12,10 +12,8 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
       - name: Build image
-        run: docker build -f docker/prod.Dockerfile -t simple-async-calc .
+        run: docker build -f docker/prod.Dockerfile -t "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:latest .
       - name: Docker login
         run: docker login -u "$DOCKER_REGISTRY_LOGIN" -p "$DOCKER_REGISTRY_PWD"
-      - name: Tag image
-        run: docker tag simple-async-calc "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:latest
       - name: Push image
         run: docker push "$DOCKER_REGISTRY_LOGIN"/simple-async-calc:latest
