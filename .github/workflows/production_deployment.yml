@@ -13,6 +13,5 @@ jobs:
       - name: Docker login
         env:
           DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
-        run: docker login 185.241.195.143 --username registry --password "$env:DOCKER_REGISTRY_PWD"
-      - name: Push image
-        run: docker push simple-async-calc
+          DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
+        run: docker login -u "$env:DOCKER_REGISTRY_LOGIN" -p "$env:DOCKER_REGISTRY_PWD"
