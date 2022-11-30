@@ -11,8 +11,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - name: Build image
-        run: docker build -f docker/prod.Dockerfile -t andruwwwka/simple-async-calc:latest .
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
