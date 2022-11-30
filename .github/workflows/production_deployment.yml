@@ -3,8 +3,8 @@ on: [workflow_dispatch]
 env:
   DOCKER_REGISTRY_PWD: ${{ secrets.DOCKER_REGISTRY_PWD }}
   DOCKER_REGISTRY_LOGIN: ${{ secrets.DOCKER_REGISTRY_LOGIN }}
-  DOCKER_IMAGE: docker.io
-  DOCKER_REGISTRY: andruwwwka/simple-async-calc
+  DOCKER_IMAGE: andruwwwka/simple-async-calc
+  DOCKER_REGISTRY: docker.io
   PROD_USER: ${{ secrets.PROD_USER }}
   PROD_HOST: ${{ secrets.PROD_HOST }}
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
